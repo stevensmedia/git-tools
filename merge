@@ -1,0 +1,48 @@
+#! /bin/sh
+
+function usage {
+	echo "Usage:"
+	echo "$0 -o <ORIGIN BRANCH; default is current> -d <DESTINATION BRANCH; default is current>"
+}
+
+while getopts o:d: option; do
+	case "${option}" in
+		o) ORIGIN=${OPTARG};;
+		d) DESTINATION=${OPTARG};;
+	esac
+done
+
+CURRENT=`git rev-parse --abbrev-ref HEAD`
+
+if [ -z "$DESTINATION" ]; then
+	if [ -z "$ORIGIN" ]; then
+		usage
+		exit
+	fi
+fi
+
+if [ -z "$ORIGIN" ]; then
+	ORIGIN="$CURRENT"
+fi
+
+if [ -z "$DESTINATION" ]; then
+	DESTINATION="$CURRENT"
+fi
+
+CODERESET="\033[0m"
+LINECOLOR="$CODERESET\033[38;5;33m"
+LINEEND="$CODERESET"
+HIGHLIGHT="$CODERESET\033[1;38;5;184m"
+HIGHLIGHTEND="$CODERESET$LINECOLOR"
+
+echo "$LINECOLOR* Updating $HIGHLIGHT$ORIGIN$HIGHLIGHTEND$LINEEND" && \
+git checkout $ORIGIN && git pull && \
+echo "\n$LINECOLOR* Updating $HIGHLIGHT$DESTINATION$HIGHLIGHTEND$LINEEND" && \
+git checkout $DESTINATION && git pull && \
+echo "\n$LINECOLOR* Merging $HIGHLIGHT$ORIGIN$HIGHLIGHTEND into $HIGHLIGHT$DESTINATION$HIGHLIGHTEND$LINEEND" && \
+git merge --no-ff -m "$ORIGIN" $ORIGIN && \
+echo "\n$LINECOLOR* Pushing $HIGHLIGHT$DESTINATION$HIGHLIGHTEND$LINEEND" && \
+git push && \
+echo "\n$LINECOLOR* Returning to $HIGHLIGHT$CURRENT$HIGHLIGHTEND$LINEEND" && \
+git checkout $CURRENT && \
+echo "\n$LINECOLOR* $HIGHLIGHT""Done.""$HIGHLIGHTEND$LINEEND"

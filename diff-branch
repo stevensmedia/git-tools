@@ -1,0 +1,4 @@
+#! /bin/sh
+BRANCH=`git rev-parse --abbrev-ref HEAD`
+BRANCH_BASE=`git reflog $BRANCH | tail -n 1 | awk "{print \\$1;}"`
+git diff $BRANCH_BASE $BRANCH
