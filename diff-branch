@@ -10,12 +10,17 @@ if [ "$1" == "" ]; then
 else
 	BRANCH=$(git rev-parse $1)
 fi
-echo "$LINECOLOR* Finding diff for $HIGHLIGHT$BRANCH$HIGHLIGHTEND$LINEEND"
 
-BASE_COMMIT=$(git log --format="%P" "$BRANCH" ^master | tail -n 1)
+if [ "$2" == "" ]; then
+	MASTER=master
+else
+	MASTER="$2"
+fi
+
+BASE_COMMIT=$(git log --format="%P" "$BRANCH" ^"$MASTER" | tail -n 1)
 
 if [ "$BASE_COMMIT" == "" ]; then
-	echo "$LINECOLOR* Branch does not diverge from master!$LINEEND"
+	echo "$LINECOLOR* Branch does not diverge from $MASTER!$LINEEND"
 	exit
 fi
 
