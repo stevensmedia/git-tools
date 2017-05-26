@@ -6,9 +6,9 @@ HIGHLIGHT="$CODERESET\033[1;38;5;184m"
 HIGHLIGHTEND="$CODERESET$LINECOLOR"
 
 if [ "$1" == "" ]; then
-	BRANCH=$(git rev-parse --abbrev-ref HEAD)
+	BRANCH=$(git rev-parse HEAD)
 else
-	BRANCH=$(git rev-parse --abbrev-ref $1)
+	BRANCH=$(git rev-parse $1)
 fi
 
 if [ "$2" == "" ]; then
