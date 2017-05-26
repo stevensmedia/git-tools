@@ -13,7 +13,12 @@ fi
 echo "$LINECOLOR* Finding diff for $HIGHLIGHT$BRANCH$HIGHLIGHTEND$LINEEND"
 
 BASE_COMMIT=$(git log --format="%P" "$BRANCH" ^master | tail -n 1)
-echo "$LINECOLOR* Base commit is $HIGHLIGHT$BASE_COMMIT$HIGHLIGHTEND$LINEEND"
 
+if [ "$BASE_COMMIT" == "" ]; then
+	echo "$LINECOLOR* Branch does not diverge from master!$LINEEND"
+	exit
+fi
+
+echo "$LINECOLOR* Base commit is $HIGHLIGHT$BASE_COMMIT$HIGHLIGHTEND$LINEEND"
 git diff $BASE_COMMIT $BRANCH
 echo "\n$LINECOLOR* $HIGHLIGHT""Done.""$HIGHLIGHTEND$LINEEND"
