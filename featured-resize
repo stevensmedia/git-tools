@@ -1,0 +1,5 @@
+#! /bin/sh
+SRC=$1
+DEST=$2/`basename $1`
+convert "$SRC" -quality 80 -resize 1600x1600 "$DEST"
+ls -al "$DEST"
